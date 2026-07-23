@@ -332,7 +332,7 @@ function renderAvatar(){
       </div>
       <label>E-mail address</label>
       <input type="email" id="emailInput" placeholder="you@company.com" value="${state.email}">
-      <p class="small-note">We use your e-mail to save your score and send your result.</p>
+      <p class="small-note">We use your e-mail to save your score.</p>
 
       <div class="consent">
         <label class="consent-row">
@@ -342,7 +342,7 @@ function renderAvatar(){
         </label>
         <label class="consent-row optin">
           <input type="checkbox" id="consentMarketing" ${state.consentMarketing?'checked':''}>
-          <span><b>Send me my result</b> + I consent to receiving marketing and educational communications on topics like business and AI. <em>(optional)</em></span>
+          <span><b>Send me updates on AI news</b> + I also consent to receiving marketing and educational communications. <em>(optional)</em></span>
         </label>
         <p class="small-note" style="text-align:left; margin-top:8px;">
           You can withdraw consent at any time via the unsubscribe link in any e-mail, or by contacting us. Withdrawing does not affect processing carried out before withdrawal.

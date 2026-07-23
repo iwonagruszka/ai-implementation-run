@@ -27,25 +27,17 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    min-height:100vh;
     font-family:'Manrope', sans-serif;
-    background:
-      radial-gradient(circle at 15% 10%, rgba(255,255,255,.6), transparent 40%),
-      linear-gradient(160deg, var(--bg-a), var(--bg-b));
+    background:transparent;
     color:var(--ink);
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:28px 16px 60px;
-  }
-  .demo-tag{
-    font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);
-    background:rgba(255,255,255,.7); border:1px solid var(--line);
-    padding:6px 14px; border-radius:999px; margin-bottom:18px; font-weight:700;
+    padding:0;
   }
   .widget{
     width:100%; max-width:460px; background:var(--panel); border-radius:28px;
-    box-shadow: 0 30px 60px -25px rgba(3,101,100,.30), 0 2px 0 rgba(255,255,255,.6) inset;
+    box-shadow: 0 2px 0 rgba(255,255,255,.6) inset;
     overflow:hidden; position:relative; min-height:660px; display:flex; flex-direction:column;
   }
   .screen{ padding:26px 24px 24px; display:flex; flex-direction:column; flex:1; animation: fadeIn .35s ease; }
@@ -155,12 +147,17 @@
   .consent-row input[type="checkbox"]{ width:17px; height:17px; margin:1px 0 0; flex:0 0 auto;
     accent-color:var(--brand); cursor:pointer; }
   .consent-row a{ color:var(--brand); font-weight:800; }
+  .consent-row.optin{ background:#EAF4F3; border:1px solid #B9D8D6; border-radius:10px; padding:9px 10px; margin-top:2px; }
+  .consent-row.optin b{ color:var(--brand-dark); font-weight:800; }
+
   .consent-row .req{ color:var(--danger); font-weight:800; }
   .consent-row em{ font-style:normal; color:var(--ink-soft); opacity:.8; }
   .small-note{ font-size:11px; color:var(--ink-soft); margin-top:8px; text-align:center; }
 </style>
 </head>
 <body>
+
+<div class="widget" id="widget"></div>
 
 <script>
 /* ---------- STATE (in memory, no localStorage) ---------- */
@@ -343,9 +340,9 @@ function renderAvatar(){
           <span>I agree that ${CONFIG.COMPANY} may store my e-mail and nickname to save my score and send me my result. <span class="req">*</span>
           <a href="${CONFIG.PRIVACY_URL}" target="_blank" rel="noopener">Privacy policy</a></span>
         </label>
-        <label class="consent-row">
+        <label class="consent-row optin">
           <input type="checkbox" id="consentMarketing" ${state.consentMarketing?'checked':''}>
-          <span>I'd also like to receive occasional e-mails about AI implementation tips and services. <em>(optional)</em></span>
+          <span><b>Send me my result</b> + I consent to receiving marketing and educational communications on topics like business and AI. <em>(optional)</em></span>
         </label>
         <p class="small-note" style="text-align:left; margin-top:8px;">
           You can withdraw consent at any time via the unsubscribe link in any e-mail, or by contacting us. Withdrawing does not affect processing carried out before withdrawal.
@@ -420,7 +417,10 @@ function subscribeToMailchimp(){
     console.warn('[AI Implementation Run] CONFIG.MAILCHIMP_ACTION is empty - e-mail not sent. Add your Mailchimp URL at the top of this file.');
     return;
   }
-  if(!state.consentPrivacy) return; // never send without required consent
+  // Only marketing-consented players are sent to Mailchimp.
+  // Everyone else plays the game; their e-mail is never transmitted.
+  if(!state.consentPrivacy) return;
+  if(!state.consentMarketing) return;
 
   const params = new URLSearchParams({
     EMAIL: state.email,

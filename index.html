@@ -330,14 +330,14 @@ function renderAvatar(){
     <div class="screen">
       <h2>Create your character</h2>
       <p class="muted">Pick a nickname and the avatar you'll run with.</p>
-      <label>Your nickname</label>
+      <label>Your nickname (visble) </label>
       <input type="text" id="nickInput" maxlength="16" placeholder="e.g. AutomationAce" value="${state.nick}">
       <label>Choose an avatar</label>
       <div class="avatar-grid" id="avatarGrid">
         <div class="avatar-opt img-opt ${state.avatar===CYBORG_KEY?'selected':''}" data-a="${CYBORG_KEY}"><img src="${CYBORG_SRC}" alt="Cyborg"></div>
         ${AVATARS.map(a=>`<div class="avatar-opt ${a===state.avatar?'selected':''}" data-a="${a}">${a}</div>`).join('')}
       </div>
-      <label>First name</label>
+      <label>First name (hidden) </label>
       <input type="text" id="firstNameInput" maxlength="40" placeholder="e.g. Anna" value="${state.firstName}">
       <label>E-mail address</label>
       <input type="email" id="emailInput" placeholder="you@company.com" value="${state.email}">
